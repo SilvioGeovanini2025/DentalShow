@@ -7,6 +7,7 @@ const links = [
   { to: "/prontuarios", label: "Prontuários" },
   { to: "/exames", label: "Exames" },
   { to: "/pagamentos", label: "Pagamentos" },
+  { to: "/servicos", label: "Produtos/Serviços" },
   { to: "/whatsapp", label: "WhatsApp" },
 ];
 

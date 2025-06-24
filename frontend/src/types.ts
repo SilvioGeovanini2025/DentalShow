@@ -19,3 +19,11 @@ export interface Produto {
   ativo: boolean;
 }
 
+// src/types.ts
+
+export interface Servico {
+  id: number;
+  nome: string;
+  valor: number;
+  ativo: boolean;
+}

@@ -27,6 +27,20 @@ export default function AgendamentosPage() {
     );
   }
 
+  // Formata a data pro padrão brasileiro
+  function formatarData(dataIso: string) {
+    if (!dataIso) return "";
+    const data = new Date(dataIso);
+    if (isNaN(data.getTime())) return dataIso; // fallback
+    return data.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
   // Simples busca por nome ou id (ajuste se quiser mais)
   const agendamentosFiltrados = agendamentos.filter((a) => {
     const buscaTrim = busca.trim().toLowerCase();
@@ -71,7 +85,9 @@ export default function AgendamentosPage() {
             <tr key={agendamento.id}>
               <td className="border px-4 py-2">{agendamento.id}</td>
               <td className="border px-4 py-2">{agendamento.paciente_nome}</td>
-              <td className="border px-4 py-2">{agendamento.data}</td>
+              <td className="border px-4 py-2">
+                {formatarData(agendamento.data)}
+              </td>
               <td className="border px-4 py-2">{agendamento.procedimento}</td>
               <td className="border px-4 py-2 flex flex-row gap-2">
                 <button

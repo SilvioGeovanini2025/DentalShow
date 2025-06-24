@@ -16,6 +16,10 @@ import AgendamentosPage from "./pages/Agendamentos/AgendamentosPage";
 import FormAgendamento from "./pages/Agendamentos/FormAgendamento";
 import AgendamentoDetalhe from "./pages/Agendamentos/AgendamentoDetalhe";
 
+import ServicosPage from "./pages/Servicos/ServicosPage";
+import FormServico from "./pages/Servicos/FormServico";
+import ServicoDetalhe from "./pages/Servicos/ServicoDetalhe";
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" />;
@@ -100,6 +104,39 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/servicos"
+                element={
+                  <ProtectedRoute>
+                    <ServicosPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/servicos/novo"
+                element={
+                  <ProtectedRoute>
+                    <FormServico />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/servicos/:id"
+                element={
+                  <ProtectedRoute>
+                    <FormServico />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/servicos/:id/detalhes"
+                element={
+                  <ProtectedRoute>
+                    <ServicoDetalhe />
+                  </ProtectedRoute>
+                }
+              />
+
 
               <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
