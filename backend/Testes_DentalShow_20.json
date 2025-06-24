@@ -1,0 +1,103 @@
+{
+  "info": {
+    "_postman_id": "6f7e072f-df4a-49eb-9c2f-123456789020",
+    "name": "Testes_DentalShow_20",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Criar Paciente",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nome\": \"João Teste\",\n    \"endereco\": \"Rua A, 123\",\n    \"telefone\": \"31999990000\",\n    \"email\": \"joao@teste.com\",\n    \"cpf\": \"123.456.789-00\"\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/pacientes", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["pacientes"] }
+      }
+    },
+    {
+      "name": "Criar Agendamento",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"paciente_id\": 1,\n    \"data_hora\": \"2025-06-02 09:00\",\n    \"procedimento\": \"Consulta inicial\"\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/agendamentos", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["agendamentos"] }
+      }
+    },
+    {
+      "name": "Criar Receituário",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"paciente_id\": 1,\n    \"texto\": \"Dipirona 500mg - Tomar 1 comprimido a cada 8h.\"\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/receituarios", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["receituarios"] }
+      }
+    },
+    {
+      "name": "Criar Prontuário",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"paciente_id\": 1,\n    \"anotacao\": \"Paciente apresenta quadro de dor leve.\"\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/prontuarios", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["prontuarios"] }
+      }
+    },
+    {
+      "name": "Upload Exame",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "paciente_id", "value": "1", "type": "text" },
+            { "key": "descricao", "value": "Radiografia panorâmica", "type": "text" },
+            { "key": "file", "type": "file", "src": "C:/CAMINHO/DO/ARQUIVO/EXEMPLO.pdf" }
+          ]
+        },
+        "url": { "raw": "http://127.0.0.1:5000/exames", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["exames"] }
+      }
+    },
+    {
+      "name": "Criar Pagamento",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"paciente_id\": 1,\n    \"valor\": 150.50,\n    \"forma_pagamento\": \"Cartão de crédito\"\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/pagamentos", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["pagamentos"] }
+      }
+    },
+    {
+      "name": "Simular envio WhatsApp",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"telefone\": \"31999990000\",\n    \"mensagem\": \"Olá, João! Seu exame está disponível.\"\n}"
+        },
+        "url": { "raw": "http://127.0.0.1:5000/whatsapp/send", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["whatsapp", "send"] }
+      }
+    },
+    { "name": "GET Pacientes", "request": { "method": "GET", "url": { "raw": "http://127.0.0.1:5000/pacientes", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["pacientes"] } } },
+    { "name": "GET Agendamentos", "request": { "method": "GET", "url": { "raw": "http://127.0.0.1:5000/agendamentos", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["agendamentos"] } } },
+    { "name": "GET Receituários", "request": { "method": "GET", "url": { "raw": "http://127.0.0.1:5000/receituarios", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["receituarios"] } } },
+    { "name": "GET Prontuários", "request": { "method": "GET", "url": { "raw": "http://127.0.0.1:5000/prontuarios", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["prontuarios"] } } },
+    { "name": "GET Exames", "request": { "method": "GET", "url": { "raw": "http://127.0.0.1:5000/exames", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["exames"] } } },
+    { "name": "GET Pagamentos", "request": { "method": "GET", "url": { "raw": "http://127.0.0.1:5000/pagamentos", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["pagamentos"] } } }
+  ]
+}
