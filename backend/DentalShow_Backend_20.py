@@ -135,7 +135,7 @@ def gerar_token(usuario_id):
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
     return token
 
-class ProdutoServico(db.Model):
+class ProdutosServico(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     valor = db.Column(db.Float, nullable=False)
@@ -475,13 +475,13 @@ def send_whatsapp():
     }, 200
 
 # Listar todos (ou só ativos se quiser)
-@app.route("/produtos_servicos", methods=["GET"])
+@app.route("/ProdutosServicos", methods=["GET"])
 def listar_produtos_servicos():
     todos = ProdutoServico.query.all()
     return jsonify([p.to_dict() for p in todos])
 
 # Criar novo
-@app.route("/produtos_servicos", methods=["POST"])
+@app.route("/ProdutosServicos", methods=["POST"])
 def criar_produto_servico():
     data = request.json
     novo = ProdutoServico(nome=data["nome"], valor=data["valor"])
@@ -490,7 +490,7 @@ def criar_produto_servico():
     return jsonify(novo.to_dict()), 201
 
 # Atualizar (editar)
-@app.route("/produtos_servicos/<int:id>", methods=["PUT"])
+@app.route("/ProdutosServicos/<int:id>", methods=["PUT"])
 def editar_produto_servico(id):
     p = ProdutoServico.query.get(id)
     if not p: return {"erro": "Não encontrado"}, 404
@@ -502,7 +502,7 @@ def editar_produto_servico(id):
     return jsonify(p.to_dict())
 
 # Desabilitar/Habilitar (soft delete)
-@app.route("/produtos_servicos/<int:id>/toggle", methods=["POST"])
+@app.route("/ProdutosServicos/<int:id>/toggle", methods=["POST"])
 def toggle_produto_servico(id):
     p = ProdutoServico.query.get(id)
     if not p: return {"erro": "Não encontrado"}, 404
