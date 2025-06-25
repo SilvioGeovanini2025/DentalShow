@@ -1,47 +1,45 @@
+// src/pages/Servicos/FormProdutosServicos.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { createServico, getServico, updateServico } from "../../services/servicos";
+import { createProdutosServicos, getProdutosServicosById, updateProdutosServicos } from "../../services/servicos";
+import type { ProdutosServicos } from "../../types";
 
-export default function FormServico() {
+export default function FormProdutosServicos() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Omit<ProdutosServicos, "id">>({
     nome: "",
-    valor: "",
+    valor: 0,
     ativo: true,
   });
 
   useEffect(() => {
     if (id) {
-      getServico(id).then(res => {
-        setForm({
-          nome: res.data.nome,
-          valor: String(res.data.valor ?? ""),
-          ativo: !!res.data.ativo,
-        });
-      });
+      getProdutosServicosById(id).then(res => setForm(res.data));
     }
   }, [id]);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value, type, checked } = e.target;
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const { name, value, type } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: name === "valor"
+        ? Number(value.replace(",", "."))
+        : (type === "checkbox" ? (e.target as HTMLInputElement).checked : value)
     }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const formToSend = {
-      ...form,
-      valor: Number(String(form.valor).replace(",", ".")), // só aqui converte pra número
-    };
     if (id) {
-      await updateServico(Number(id), formToSend);
+      await updateProdutosServicos(Number(id), form);
     } else {
-      await createServico(formToSend);
+      await createProdutosServicos(form);
     }
+    navigate("/servicos");
+  }
+
+  function handleCancel() {
     navigate("/servicos");
   }
 
@@ -63,7 +61,8 @@ export default function FormServico() {
         <div>
           <label className="block">Valor (R$):</label>
           <input
-            type="text"
+            type="number"
+            step="0.01"
             name="valor"
             value={form.valor}
             onChange={handleChange}
@@ -79,11 +78,17 @@ export default function FormServico() {
             name="ativo"
             checked={form.ativo}
             onChange={handleChange}
+            className="h-5 w-5"
           />
         </div>
-        <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-          Salvar
-        </button>
+        <div className="flex gap-4">
+          <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            Salvar
+          </button>
+          <button type="button" onClick={handleCancel} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+            Cancelar
+          </button>
+        </div>
       </form>
     </div>
   );

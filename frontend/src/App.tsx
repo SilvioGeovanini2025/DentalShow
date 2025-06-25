@@ -16,9 +16,9 @@ import AgendamentosPage from "./pages/Agendamentos/AgendamentosPage";
 import FormAgendamento from "./pages/Agendamentos/FormAgendamento";
 import AgendamentoDetalhe from "./pages/Agendamentos/AgendamentoDetalhe";
 
-import ServicosPage from "./pages/Servicos/ServicosPage";
-import FormServico from "./pages/Servicos/FormServico";
-import ServicoDetalhe from "./pages/Servicos/ServicoDetalhe";
+import ProdutosServicosPage from "./pages/Servicos/ProdutosServicosPage";
+import FormProdutosServicos from "./pages/Servicos/FormProdutosServicos";
+import DetalheProdutosServicos from "./pages/Servicos/DetalheProdutosServicos";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("token");
@@ -105,34 +105,34 @@ export default function App() {
                 }
               />
               <Route
-                path="/servicos"
+                path="/ProdutosServicos"
                 element={
                   <ProtectedRoute>
-                    <ServicosPage />
+                    <ProdutosServicosPage />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/servicos/novo"
+                path="/ProdutosServicos/novo"
                 element={
                   <ProtectedRoute>
-                    <FormServico />
+                    <FormProdutosServicos />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/servicos/:id"
+                path="/ProdutosServicos/:id"
                 element={
                   <ProtectedRoute>
-                    <FormServico />
+                    <FormProdutosServicos />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/servicos/:id/detalhes"
+                path="/ProdutosServicos/:id/detalhes"
                 element={
                   <ProtectedRoute>
-                    <ServicoDetalhe />
+                    <DetalheProdutosServicos />
                   </ProtectedRoute>
                 }
               />

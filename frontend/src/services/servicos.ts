@@ -1,19 +1,18 @@
-// src/services/servicos.ts
 import api from "./api";
-import type { Servico } from "../types";
+import type { ProdutosServicos } from "../types";
 
-export function getServicos() {
-  return api.get<Servico[]>("/ProdutosServicos");
+export function getProdutosServicos() {
+  return api.get<ProdutosServicos[]>("/ProdutosServicos");
 }
-export function getServico(id: string | number) {
-  return api.get<Servico>(`/ProdutosServicos/${id}`);
+export function getProdutosServicosById(id: string | number) {
+  return api.get<ProdutosServicos>(`/ProdutosServicos/${id}`);
 }
-export function createServico(data: Omit<Servico, "id">) {
+export function createProdutosServicos(data: Omit<ProdutosServicos, "id">) {
   return api.post("/ProdutosServicos", data);
 }
-export function updateServico(id: number, data: Omit<Servico, "id">) {
+export function updateProdutosServicos(id: number, data: Omit<ProdutosServicos, "id">) {
   return api.put(`/ProdutosServicos/${id}`, data);
 }
-export function deleteServico(id: number) {
+export function deleteProdutosServicos(id: number) {
   return api.delete(`/ProdutosServicos/${id}`);
 }

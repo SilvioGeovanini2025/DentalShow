@@ -21,7 +21,7 @@ export interface Produto {
 
 // src/types.ts
 
-export interface Servico {
+export interface ProdutosServicos {
   id: number;
   nome: string;
   valor: number;
