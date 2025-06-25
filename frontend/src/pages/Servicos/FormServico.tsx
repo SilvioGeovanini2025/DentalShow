@@ -1,12 +1,12 @@
-// src/pages/Servicos/FormServico.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { createServico, getServico, updateServico } from "../../services/servicos";
-import type { Servico } from "../../types";
 
 export default function FormServico() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // Valor em string pro input, ativo já true
   const [form, setForm] = useState({
     nome: "",
     valor: "",
@@ -15,24 +15,18 @@ export default function FormServico() {
 
   useEffect(() => {
     if (id) {
-      getServico(id).then(res => {
-        setForm({
-          ...res.data,
-          valor: String(res.data.valor ?? ""),
-        });
-      });    
+      getServico(id).then(res => setForm({
+        ...res.data,
+        valor: String(res.data.valor ?? ""), // força string (evita NaN!)
+      }));
     }
   }, [id]);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const { name, value, type } = e.target;
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value, type, checked } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: type === "checkbox"
-          ? (e.target as HTMLInputElement).checked
-          : value
-          ? Number(value.replace(",", "."))
-          : value,
+      [name]: type === "checkbox" ? checked : value
     }));
   }
 
@@ -40,7 +34,7 @@ export default function FormServico() {
     e.preventDefault();
     const formToSend = {
       ...form,
-      valor: Number(String(form.valor).replace(",", "."))
+      valor: Number(String(form.valor).replace(",", ".")) // agora só converte ao salvar!
     };
     if (id) {
       await updateServico(Number(id), formToSend);
@@ -68,18 +62,6 @@ export default function FormServico() {
         <div>
           <label className="block">Valor (R$):</label>
           <input
-            type="number"
-            step="0.01"
-            name="valor"
-            value={form.valor}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-1 rounded"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <label>Ativo:</label>
-          <input
             type="text"
             name="valor"
             value={form.valor}
@@ -87,6 +69,16 @@ export default function FormServico() {
             required
             className="w-full border px-3 py-1 rounded"
             placeholder="Ex: 150,00"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <label>Ativo:</label>
+          <input
+            type="checkbox"
+            name="ativo"
+            checked={form.ativo}
+            onChange={handleChange}
+            className="form-checkbox"
           />
         </div>
         <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
