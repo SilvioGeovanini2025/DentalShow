@@ -135,7 +135,7 @@ def gerar_token(usuario_id):
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
     return token
 
-class ProdutosServico(db.Model):
+class ProdutosServicos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     valor = db.Column(db.Float, nullable=False)
@@ -477,14 +477,14 @@ def send_whatsapp():
 # Listar todos (ou só ativos se quiser)
 @app.route("/ProdutosServicos", methods=["GET"])
 def listar_produtos_servicos():
-    todos = ProdutoServico.query.all()
+    todos = ProdutosServicos.query.all()
     return jsonify([p.to_dict() for p in todos])
 
 # Criar novo
 @app.route("/ProdutosServicos", methods=["POST"])
 def criar_produto_servico():
     data = request.json
-    novo = ProdutoServico(nome=data["nome"], valor=data["valor"])
+    novo = ProdutosServicos(nome=data["nome"], valor=data["valor"])
     db.session.add(novo)
     db.session.commit()
     return jsonify(novo.to_dict()), 201

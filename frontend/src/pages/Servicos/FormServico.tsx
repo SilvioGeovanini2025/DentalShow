@@ -5,8 +5,6 @@ import { createServico, getServico, updateServico } from "../../services/servico
 export default function FormServico() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  // Valor em string pro input, ativo já true
   const [form, setForm] = useState({
     nome: "",
     valor: "",
@@ -15,10 +13,13 @@ export default function FormServico() {
 
   useEffect(() => {
     if (id) {
-      getServico(id).then(res => setForm({
-        ...res.data,
-        valor: String(res.data.valor ?? ""), // força string (evita NaN!)
-      }));
+      getServico(id).then(res => {
+        setForm({
+          nome: res.data.nome,
+          valor: String(res.data.valor ?? ""),
+          ativo: !!res.data.ativo,
+        });
+      });
     }
   }, [id]);
 
@@ -26,7 +27,7 @@ export default function FormServico() {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   }
 
@@ -34,7 +35,7 @@ export default function FormServico() {
     e.preventDefault();
     const formToSend = {
       ...form,
-      valor: Number(String(form.valor).replace(",", ".")) // agora só converte ao salvar!
+      valor: Number(String(form.valor).replace(",", ".")), // só aqui converte pra número
     };
     if (id) {
       await updateServico(Number(id), formToSend);
@@ -78,7 +79,6 @@ export default function FormServico() {
             name="ativo"
             checked={form.ativo}
             onChange={handleChange}
-            className="form-checkbox"
           />
         </div>
         <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
