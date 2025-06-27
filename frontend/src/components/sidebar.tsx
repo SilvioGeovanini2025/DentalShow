@@ -1,35 +1,70 @@
-import { NavLink } from "react-router-dom";
+// src/components/sidebar.tsx
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaUser,
+  FaCalendarAlt,
+  FaPrescriptionBottle,
+  FaFileMedical,
+  FaFlask,
+  FaMoneyBillAlt,
+  FaBoxOpen,
+  FaWhatsapp,
+  FaSignOutAlt,
+} from "react-icons/fa";
 
-const links = [
-  { to: "/pacientes", label: "Pacientes" },
-  { to: "/agendamentos", label: "Agendamentos" },
-  { to: "/receituarios", label: "Receituários" },
-  { to: "/prontuarios", label: "Prontuários" },
-  { to: "/exames", label: "Exames" },
-  { to: "/pagamentos", label: "Pagamentos" },
-  { to: "/servicos", label: "Produtos/Serviços" },
-  { to: "/whatsapp", label: "WhatsApp" },
-];
+const Sidebar = () => {
+  const navigate = useNavigate();
 
-export default function Sidebar() {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
-    <aside className="bg-blue-900 text-white w-52 h-full flex flex-col px-4 py-8">
-      <div className="font-bold text-2xl mb-8 text-center tracking-wider">
+    <div className="w-1/6 h-screen bg-blue-900 text-white flex flex-col">
+      <div className="text-2xl font-bold p-4 border-b border-blue-700">
         DentalShow
       </div>
-      <nav className="flex flex-col gap-3">
-        {links.map(link => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            className={({ isActive }) =>
-              `py-2 px-3 rounded-xl transition ${isActive ? "bg-white text-blue-900 font-semibold" : "hover:bg-blue-800"}`
-            }
-          >
-            {link.label}
-          </NavLink>
-        ))}
+      <nav className="flex-1 p-4 space-y-2">
+        <Link to="/pacientes" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaUser />
+          <span>Pacientes</span>
+        </Link>
+        <Link to="/agendamentos" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaCalendarAlt />
+          <span>Agendamentos</span>
+        </Link>
+        <Link to="/receituarios" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaPrescriptionBottle />
+          <span>Receituários</span>
+        </Link>
+        <Link to="/prontuarios" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaFileMedical />
+          <span>Prontuários</span>
+        </Link>
+        <Link to="/exames" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaFlask />
+          <span>Exames</span>
+        </Link>
+        <Link to="/pagamentos" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaMoneyBillAlt />
+          <span>Pagamentos</span>
+        </Link>
+        <Link to="/produtosservicos" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaBoxOpen />
+          <span>Produtos/Serviços</span>
+        </Link>
+        <Link to="https://wa.me/seunumero" target="_blank" className="flex items-center space-x-2 hover:text-blue-300">
+          <FaWhatsapp />
+          <span>WhatsApp</span>
+        </Link>
       </nav>
-    </aside>
+      <button onClick={handleLogout} className="p-4 flex items-center space-x-2 hover:text-red-500">
+        <FaSignOutAlt />
+        <span>Sair</span>
+      </button>
+    </div>
   );
-}
+};
+
+export default Sidebar;

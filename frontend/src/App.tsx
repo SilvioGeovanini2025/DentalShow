@@ -1,37 +1,36 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// src/App.tsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ProtectedRoute from "./ProtectedRoute";
-import PrivateLayout from "./components/PrivateLayout";
+
 import PacientesPage from "./pages/Pacientes/PacientesPage";
 import AgendamentosPage from "./pages/Agendamentos/AgendamentosPage";
 import PagamentosPage from "./pages/Pagamentos/PagamentosPage";
 import ProdutosServicosPage from "./pages/Servicos/ProdutosServicosPage";
 
+import Sidebar from "./components/sidebar";
+
 function App() {
+  const token = localStorage.getItem("token");
+
   return (
-    <Router>
+    <BrowserRouter>
+      {token && <Sidebar />}
       <Routes>
+        <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="pacientes" element={<PacientesPage />} />
-          <Route path="agendamentos" element={<AgendamentosPage />} />
-          <Route path="pagamentos" element={<PagamentosPage />} />
-          <Route path="produtosservicos" element={<ProdutosServicosPage />} />
-        </Route>
-
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {token && (
+          <>
+            <Route path="/pacientes" element={<PacientesPage />} />
+            <Route path="/agendamentos" element={<AgendamentosPage />} />
+            <Route path="/pagamentos" element={<PagamentosPage />} />
+            <Route path="/produtosservicos" element={<ProdutosServicosPage />} />
+          </>
+        )}
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
