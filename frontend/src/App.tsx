@@ -1,14 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ProtectedRoute from "./ProtectedRoute";
+import PrivateLayout from "./components/PrivateLayout";
 import PacientesPage from "./pages/Pacientes/PacientesPage";
 import AgendamentosPage from "./pages/Agendamentos/AgendamentosPage";
 import PagamentosPage from "./pages/Pagamentos/PagamentosPage";
 import ProdutosServicosPage from "./pages/Servicos/ProdutosServicosPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-
-import ProtectedRoute from "./ProtectedRoute";
-import PrivateLayout from "./components/PrivateLayout";
 
 function App() {
   return (

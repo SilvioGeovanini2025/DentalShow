@@ -1,17 +1,13 @@
-import type { ReactNode } from "react";
-import Sidebar from "./Sidebar";
-import Header from "./Header"; // se não usar, pode remover
+import React from "react";
+import Sidebar from "./sidebar";
+import { Outlet } from "react-router-dom";
 
-type PrivateLayoutProps = {
-  children: ReactNode;
-};
-
-const PrivateLayout = ({ children }: PrivateLayoutProps) => {
+const PrivateLayout = (): React.JSX.Element => {
   return (
     <div className="flex">
       <Sidebar />
       <main className="flex-1 p-4">
-        {children}
+        <Outlet />
       </main>
     </div>
   );
