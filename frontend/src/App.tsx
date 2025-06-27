@@ -1,148 +1,40 @@
-// src/App.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Sidebar from "./components/sidebar";
-import Header from "./components/Header";
 
+import PacientesPage from "./pages/Pacientes/PacientesPage";
+import AgendamentosPage from "./pages/Agendamentos/AgendamentosPage";
+import PagamentosPage from "./pages/Pagamentos/PagamentosPage";
+import ProdutosServicosPage from "./pages/Servicos/ProdutosServicosPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
-// Pacientes
-import PacientesPage from "./pages/Pacientes/PacientesPage";
-import FormPaciente from "./pages/Pacientes/FormPaciente";
-import PacienteDetalhe from "./pages/Pacientes/PacienteDetalhe";
+import ProtectedRoute from "./ProtectedRoute";
+import PrivateLayout from "./components/PrivateLayout";
 
-// Agendamentos
-import AgendamentosPage from "./pages/Agendamentos/AgendamentosPage";
-import FormAgendamento from "./pages/Agendamentos/FormAgendamento";
-import AgendamentoDetalhe from "./pages/Agendamentos/AgendamentoDetalhe";
-
-import ProdutosServicosPage from "./pages/Servicos/ProdutosServicosPage";
-import FormProdutosServicos from "./pages/Servicos/FormProdutosServicos";
-import DetalheProdutosServicos from "./pages/Servicos/DetalheProdutosServicos";
-
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/login" />;
-}
-
-export default function App() {
+function App() {
   return (
     <Router>
-      <div className="flex h-screen">
-        <Sidebar />
-        <main className="flex-1 flex flex-col">
-          <Header />
-          <div className="flex-1 overflow-y-auto p-4">
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-              {/* Pacientes */}
-              <Route
-                path="/pacientes"
-                element={
-                  <ProtectedRoute>
-                    <PacientesPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pacientes/novo"
-                element={
-                  <ProtectedRoute>
-                    <FormPaciente />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pacientes/:id"
-                element={
-                  <ProtectedRoute>
-                    <FormPaciente />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pacientes/:id/detalhes"
-                element={
-                  <ProtectedRoute>
-                    <PacienteDetalhe />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <PrivateLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="pacientes" element={<PacientesPage />} />
+          <Route path="agendamentos" element={<AgendamentosPage />} />
+          <Route path="pagamentos" element={<PagamentosPage />} />
+          <Route path="produtosservicos" element={<ProdutosServicosPage />} />
+        </Route>
 
-              {/* Agendamentos */}
-              <Route
-                path="/agendamentos"
-                element={
-                  <ProtectedRoute>
-                    <AgendamentosPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/agendamentos/novo"
-                element={
-                  <ProtectedRoute>
-                    <FormAgendamento />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/agendamentos/:id"
-                element={
-                  <ProtectedRoute>
-                    <FormAgendamento />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/agendamentos/:id/detalhes"
-                element={
-                  <ProtectedRoute>
-                    <AgendamentoDetalhe />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/ProdutosServicos"
-                element={
-                  <ProtectedRoute>
-                    <ProdutosServicosPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/ProdutosServicos/novo"
-                element={
-                  <ProtectedRoute>
-                    <FormProdutosServicos />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/ProdutosServicos/:id"
-                element={
-                  <ProtectedRoute>
-                    <FormProdutosServicos />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/ProdutosServicos/:id/detalhes"
-                element={
-                  <ProtectedRoute>
-                    <DetalheProdutosServicos />
-                  </ProtectedRoute>
-                }
-              />
-
-
-              <Route path="*" element={<Navigate to="/login" />} />
-            </Routes>
-          </div>
-        </main>
-      </div>
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
     </Router>
   );
 }
+
+export default App;
