@@ -11,19 +11,3 @@ export interface Agendamento {
   procedimento: string;
   observacao: string;
 }
-
-export interface Produto {
-  id: number;
-  nome: string;
-  valor: number;
-  ativo: boolean;
-}
-
-// src/types.ts
-
-export interface ProdutosServicos {
-  id: number;
-  nome: string;
-  valor: number;
-  ativo: boolean;
-}

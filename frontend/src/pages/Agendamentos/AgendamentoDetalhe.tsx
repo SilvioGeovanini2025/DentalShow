@@ -1,19 +1,21 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getAgendamento } from "../../services/agendamentos";
+import type { Agendamento } from "../../types";
 
 export default function AgendamentoDetalhe() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [agendamento, setAgendamento] = useState<any>(null);
+  const [agendamento, setAgendamento] = useState<Agendamento | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    getAgendamento(id)
-      .then(res => setAgendamento(res.data))
-      .finally(() => setLoading(false));
+    getAgendamento(id).then(res => {
+      setAgendamento(res.data);
+      setLoading(false);
+    });
   }, [id]);
 
   if (loading) return <div>Carregando...</div>;
@@ -27,12 +29,13 @@ export default function AgendamentoDetalhe() {
       >
         ← Voltar
       </button>
-      <h2 className="text-2xl font-bold mb-2">Detalhes do Agendamento</h2>
-      <div className="mb-2"><strong>ID:</strong> {agendamento.id}</div>
-      <div className="mb-2"><strong>Paciente:</strong> {agendamento.paciente_nome}</div>
-      <div className="mb-2"><strong>Data:</strong> {agendamento.data}</div>
-      <div className="mb-2"><strong>Procedimento:</strong> {agendamento.procedimento}</div>
-      {/* Adapte aqui se quiser exibir mais campos */}
+      <h2 className="text-2xl font-bold mb-2">Agendamento #{agendamento.id}</h2>
+      <div className="mb-4">
+        <div><b>Paciente:</b> {agendamento.paciente_nome}</div>
+        <div><b>Data:</b> {agendamento.data ? new Date(agendamento.data).toLocaleString("pt-BR") : ""}</div>
+        <div><b>Procedimento:</b> {agendamento.procedimento}</div>
+        <div><b>Observação:</b> {agendamento.observacao}</div>
+      </div>
     </div>
   );
 }
