@@ -1,94 +1,72 @@
-// src/App.tsx
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/sidebar";
-import Header from "./components/Header";
 
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-
-// Pacientes
 import PacientesPage from "./pages/Pacientes/PacientesPage";
 import FormPaciente from "./pages/Pacientes/FormPaciente";
 import PacienteDetalhe from "./pages/Pacientes/PacienteDetalhe";
 
-// Agendamentos (novo)
 import AgendamentosPage from "./pages/Agendamentos/AgendamentosPage";
+import FormAgendamento from "./pages/Agendamentos/FormAgendamento";
 import AgendamentoDetalhe from "./pages/Agendamentos/AgendamentoDetalhe";
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/login" />;
-}
+import ProdutosServicosPage from "./pages/ProdutosServicos/ProdutosServicosPage";
+import FormProdutoServico from "./pages/ProdutosServicos/FormProdutoServico";
+import ProdutoServicoDetalhe from "./pages/ProdutosServicos/ProdutoServicoDetalhe";
 
-export default function App() {
+import PagamentosPage from "./pages/Pagamentos/PagamentosPage";
+import FormPagamento from "./pages/Pagamentos/FormPagamento";
+import PagamentoDetalhe from "./pages/Pagamentos/PagamentoDetalhe";
+
+import LoginPage from "./pages/LoginPage";
+
+const App: React.FC = () => {
+  const token = localStorage.getItem("token");
+
   return (
     <Router>
-      <div className="flex h-screen">
-        <Sidebar />
-        <main className="flex-1 flex flex-col">
-          <Header />
-          <div className="flex-1 overflow-y-auto p-4">
+      {token ? (
+        <div className="flex h-screen bg-gray-100">
+          <Sidebar />
+          <main className="flex-1 p-6 overflow-auto">
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+              {/* Módulo Pacientes */}
+              <Route path="/pacientes" element={<PacientesPage />} />
+              <Route path="/pacientes/novo" element={<FormPaciente />} />
+              <Route path="/pacientes/:id/detalhes" element={<PacienteDetalhe />} />
+              <Route path="/pacientes/:id" element={<FormPaciente />} />
 
-              {/* Pacientes */}
-              <Route
-                path="/pacientes"
-                element={
-                  <ProtectedRoute>
-                    <PacientesPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pacientes/novo"
-                element={
-                  <ProtectedRoute>
-                    <FormPaciente />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pacientes/:id"
-                element={
-                  <ProtectedRoute>
-                    <FormPaciente />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pacientes/:id/detalhes"
-                element={
-                  <ProtectedRoute>
-                    <PacienteDetalhe />
-                  </ProtectedRoute>
-                }
-              />
+              {/* Módulo Agendamentos */}
+              <Route path="/agendamentos" element={<AgendamentosPage />} />
+              <Route path="/agendamentos/novo" element={<FormAgendamento />} />
+              <Route path="/agendamentos/:id/detalhes" element={<AgendamentoDetalhe />} />
+              <Route path="/agendamentos/:id" element={<FormAgendamento />} />
 
-              {/* Agendamentos */}
-              <Route
-                path="/agendamentos"
-                element={
-                  <ProtectedRoute>
-                    <AgendamentosPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/agendamentos/:id/detalhes"
-                element={
-                  <ProtectedRoute>
-                    <AgendamentoDetalhe />
-                  </ProtectedRoute>
-                }
-              />
+              {/* Módulo Produtos/Serviços */}
+              <Route path="/produtosservicos" element={<ProdutosServicosPage />} />
+              <Route path="/produtosservicos/novo" element={<FormProdutoServico />} />
+              <Route path="/produtosservicos/:id/detalhes" element={<ProdutoServicoDetalhe />} />
+              <Route path="/produtosservicos/:id" element={<FormProdutoServico />} />
 
-              <Route path="*" element={<Navigate to="/login" />} />
+              {/* Módulo Pagamentos */}
+              <Route path="/pagamentos" element={<PagamentosPage />} />
+              <Route path="/pagamentos/novo" element={<FormPagamento />} />
+              <Route path="/pagamentos/:id/detalhes" element={<PagamentoDetalhe />} />
+              <Route path="/pagamentos/:id" element={<FormPagamento />} />
+
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/pacientes" />} />
             </Routes>
-          </div>
-        </main>
-      </div>
+          </main>
+        </div>
+      ) : (
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      )}
     </Router>
   );
-}
+};
+
+export default App;

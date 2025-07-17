@@ -1,79 +1,56 @@
-import { useEffect, useState } from "react";
-import { deletePagamento } from "../../services/pagamentos";
-import type { Pagamento } from "../../services/pagamentos";
-import { getPacientes } from "../../services/pacientes";
+import React from "react";
+import type { Pagamento } from "../../types";
+import { formatarValorBRL } from "../../utils/formatters";
 
-type Props = {
-  pagamentos: Pagamento[];
-  setEdit: (pagamento: Pagamento) => void;
-  refreshList: () => void;
-};
-
-export default function ListPagamentos({ pagamentos, setEdit, refreshList }: Props) {
-  const [pacientes, setPacientes] = useState<{ id: number; nome: string }[]>([]);
-
-  useEffect(() => {
-    getPacientes().then(res => setPacientes(res.data));
-  }, []);
-
-  const getPacienteNome = (id: number) => {
-    const p = pacientes.find(p => p.id === id);
-    return p ? p.nome : "Paciente não encontrado";
-  };
-
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("Deseja excluir este pagamento?")) return;
-    await deletePagamento(id);
-    refreshList();
-  };
-
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Pagamentos</h2>
-      <table className="min-w-full bg-white shadow rounded-xl">
-        <thead>
-          <tr>
-            <th className="py-2 px-4 text-left">ID</th>
-            <th className="py-2 px-4 text-left">Paciente</th>
-            <th className="py-2 px-4 text-left">Valor (R$)</th>
-            <th className="py-2 px-4 text-left">Forma</th>
-            <th className="py-2 px-4 text-left">Data</th>
-            <th className="py-2 px-4 text-left">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pagamentos.map(p => (
-            <tr key={p.id} className="border-t">
-              <td className="py-2 px-4">{p.id}</td>
-              <td className="py-2 px-4">{getPacienteNome(p.paciente_id)}</td>
-              <td className="py-2 px-4">R$ {Number(p.valor).toFixed(2)}</td>
-              <td className="py-2 px-4">{p.forma_pagamento}</td>
-              <td className="py-2 px-4">{p.data}</td>
-              <td className="py-2 px-4 flex gap-2">
-                <button
-                  className="bg-orange-500 hover:bg-orange-700 text-white px-3 py-1 rounded"
-                  onClick={() => setEdit(p)}
-                >
-                  Editar
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded"
-                  onClick={() => handleDelete(p.id)}
-                >
-                  Excluir
-                </button>
-              </td>
-            </tr>
-          ))}
-          {pagamentos.length === 0 && (
-            <tr>
-              <td colSpan={6} className="text-center text-gray-400 py-8">
-                Nenhum pagamento encontrado.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+// Função utilitária para formatar data no padrão BR (dd/mm/yyyy HH:MM)
+function formatarData(dataString?: string) {
+  if (!dataString) return "";
+  // Aceita tanto "YYYY-MM-DD HH:mm" quanto ISO, e retorna "dd/mm/yyyy HH:mm"
+  const [datePart, timePart] = dataString.split(" ");
+  if (!datePart) return dataString;
+  const [ano, mes, dia] = datePart.split("-");
+  if (!ano || !mes || !dia) return dataString;
+  return `${dia}/${mes}/${ano}` + (timePart ? ` ${timePart}` : "");
 }
+
+interface Props {
+  pagamentos: Pagamento[];
+  onEditar: (id: number) => void;
+  onExcluir: (id: number) => void;
+}
+
+const ListPagamentos: React.FC<Props> = ({
+  pagamentos,
+  onEditar,
+  onExcluir,
+}) => (
+  <table className="min-w-full bg-white rounded shadow">
+    <thead>
+      <tr>
+        <th className="px-4 py-2">ID</th>
+        <th className="px-4 py-2">Paciente</th>
+        <th className="px-4 py-2">Valor</th>
+        <th className="px-4 py-2">Forma de Pagamento</th>
+        <th className="px-4 py-2">Data</th>
+        <th className="px-4 py-2">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {pagamentos.map(pag => (
+        <tr key={pag.id}>
+          <td className="border px-4 py-2">{pag.id}</td>
+          <td className="border px-4 py-2">{pag.paciente_nome || pag.paciente_id}</td>
+          <td className="border px-4 py-2">{formatarValorBRL(pag.valor)}</td>
+          <td className="border px-4 py-2">{pag.forma_pagamento}</td>
+          <td className="border px-4 py-2">{formatarData(pag.data)}</td>
+          <td className="border px-4 py-2 flex gap-2">
+            <button className="bg-blue-700 text-white px-3 py-1 rounded" onClick={() => onEditar(pag.id)}>Editar</button>
+            <button className="bg-blue-600 text-white px-3 py-1 rounded" onClick={() => onExcluir(pag.id)}>Excluir</button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
+
+export default ListPagamentos;

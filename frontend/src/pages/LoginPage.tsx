@@ -14,7 +14,8 @@ export default function LoginPage() {
     try {
       const { data } = await login({ username: usuario, password: senha });
       localStorage.setItem("token", data.token);
-      navigate("/pacientes");  // redireciona pro módulo de Pacientes direto
+      window.location.reload(); // <-- recarrega pra garantir que renderize tudo na hora
+      // não precisa do navigate("/pacientes")
     } catch {
       setErro("Usuário ou senha inválidos.");
     }

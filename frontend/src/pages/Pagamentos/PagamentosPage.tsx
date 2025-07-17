@@ -1,43 +1,44 @@
-import { useState, useEffect } from "react";
-import { getPagamentos } from "../../services/pagamentos";
-import type { Pagamento } from "../../services/pagamentos";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getPagamentos, deletePagamento } from "../../services/pagamentos";
 import ListPagamentos from "./ListPagamentos";
-import FormPagamento from "./FormPagamento";
+import type { Pagamento } from "../../types";
 
-export default function PagamentosPage() {
+const PagamentosPage: React.FC = () => {
   const [pagamentos, setPagamentos] = useState<Pagamento[]>([]);
-  const [editPagamento, setEditPagamento] = useState<Pagamento | null>(null);
+  const navigate = useNavigate();
 
-  const fetchPagamentos = async () => {
-    const res = await getPagamentos();
-    setPagamentos(res.data);
+  const fetchPagamentos = () => {
+    getPagamentos().then(res => setPagamentos(res.data));
   };
 
-  useEffect(() => {
-    fetchPagamentos();
-  }, []);
+  useEffect(() => { fetchPagamentos(); }, []);
 
-  const handleSuccess = () => {
-    setEditPagamento(null);
-    fetchPagamentos();
-  };
-
-  const handleCancel = () => {
-    setEditPagamento(null);
+  const handleDelete = async (id: number) => {
+    if (window.confirm("Confirma a exclusão?")) {
+      await deletePagamento(id);
+      fetchPagamentos();
+    }
   };
 
   return (
     <div>
-      <FormPagamento
-        pagamento={editPagamento}
-        onSuccess={handleSuccess}
-        onCancel={handleCancel}
-      />
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-center w-full">Pagamentos</h1>
+        <button
+          className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded ml-4"
+          onClick={() => navigate("/pagamentos/novo")}
+        >
+          Novo Pagamento
+        </button>
+      </div>
       <ListPagamentos
         pagamentos={pagamentos}
-        setEdit={setEditPagamento}
-        refreshList={fetchPagamentos}
+        onEditar={id => navigate(`/pagamentos/${id}`)}
+        onExcluir={handleDelete}
       />
     </div>
   );
-}
+};
+
+export default PagamentosPage;
